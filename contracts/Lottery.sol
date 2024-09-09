@@ -27,6 +27,19 @@ contract Lottery {
         return uint (keccak256(abi.encodePacked(block.prevrandao, block.timestamp, players.length)));
     }
     //function to check the winner
+       function lotteryWinner() public {
+        require(manager == msg.sender, 'You are not the manager');
+        require(players.length >=3, 'players cannot be less than 3');
+
+        uint r = randomness();
+        uint index = r%players.length;
+
+        winner = players[index];
+        winner.transfer(checkBalance());
+
+        players = new address payable [] (0);
+
+    }
 
     
 
