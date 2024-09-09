@@ -23,6 +23,9 @@ contract Lottery {
         return address(this).balance;
     }
     //function to generate randomness
+     function randomness() internal view returns(uint) {
+        return uint (keccak256(abi.encodePacked(block.prevrandao, block.timestamp, players.length)));
+    }
     //function to check the winner
 
     
