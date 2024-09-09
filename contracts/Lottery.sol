@@ -1,34 +1,30 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.24;
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
 
-// Uncomment this line to use console.log
-// import "hardhat/console.sol";
+contract Lottery {
+    // setting up the state variables
+    address  manager;
+    address payable winner;
+    address payable [] players;
 
-contract Lock {
-    uint public unlockTime;
-    address payable public owner;
-
-    event Withdrawal(uint amount, uint when);
-
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
-
-        unlockTime = _unlockTime;
-        owner = payable(msg.sender);
+    // The constructor function to be called once on deploymemt
+    constructor() {
+        manager =  msg.sender;
     }
 
-    function withdraw() public {
-        // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
-
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
-
-        emit Withdrawal(address(this).balance, block.timestamp);
-
-        owner.transfer(address(this).balance);
+    // function to participate in the lottery
+    function participate() payable public{
+        require(msg.value == 0.05 ether, 'Please pay 0.05 ether only to participate');
+        players.push(payable (msg.sender));
     }
+    // function to confirm the balance obtained
+    function checkBalance() public view returns (uint) {
+        require(manager == msg.sender, 'You are not the manager');
+        return address(this).balance;
+    }
+    //function to generate randomness
+    //function to check the winner
+
+    
+
 }
